@@ -1,0 +1,23 @@
+{
+  "name": "voiceyourhunger-botservice",
+  "version": "1.0.0",
+  "description": "Food Ordering Bot",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pavanbhat/voiceyourhunger-botservice.git"
+  },
+  "author": "Pavan Prabhakar Bhat",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pavanbhat/voiceyourhunger-botservice/issues"
+  },
+  "homepage": "https://github.com/pavanbhat/voiceyourhunger-botservice#readme",
+  "dependencies": {
+    "botbuilder": "^3.14.0",
+    "restify": "^6.3.4"
+  }
+}
