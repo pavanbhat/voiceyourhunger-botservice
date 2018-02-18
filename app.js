@@ -5,7 +5,7 @@ var geolocation = require('geolocation');
 const publicIp = require('public-ip');
 var geoip = require('geoip-lite');
 
-var url = 'http://localhost:9999/vyh/api/restaurants/search';
+var url = 'http://ec2-18-219-9-21.us-east-2.compute.amazonaws.com:9999/vyh/api/restaurants/search';
 var locParameters = [];
 // var lat = '', long = '';
 var geo = {};
@@ -128,7 +128,7 @@ bot.dialog('askForRestaurant', [
     function (session, results) {
         console.log(listOfRestaurants[""+session.message['text']]);
         console.log(results);
-        var menuURL = 'http://localhost:9999/vyh/api/restaurants/' + listOfRestaurants.get(""+session.message['text']) + '/menu'; 
+        var menuURL = 'http://ec2-18-219-9-21.us-east-2.compute.amazonaws.com:9999/vyh/api/restaurants/' + listOfRestaurants.get(""+session.message['text']) + '/menu'; 
         
         var response = request('GET', menuURL);
         // var user = JSON.parse(response.getBody('utf8'));
@@ -150,7 +150,8 @@ bot.dialog('askForMenu', [
             session.send(listOfMenus[i]["name"]);
         }
         builder.Prompts.text(session, "Please enter your choice:");
-        console.log("Here is the text: " + session.message['text']);
+        console.log("Everything works well untill here!");
+        console.log("Here is the text: " + results.response);
         // console.log(listOfMenus[temp]["name"]);
         // builder.Prompts.text(session, "The following are the options in " + listOfMenus[temp]["name"] + ":");
         // for(var j = 0; j < listOfMenus[temp]["items"].length; j++){
