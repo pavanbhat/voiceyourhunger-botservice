@@ -143,18 +143,25 @@ bot.dialog('askForRestaurant', [
 
 // Dialog to ask for the reservation name.
 bot.dialog('askForMenu', [
-    function (session, results) {
-        session.send("Here are the food options from the menu: "); 
-        let flag = false;
-        var menu = "";
+    function (session) {
+        builder.Prompts.text(session, "Here are the food options from the menu: "); 
         for(var i = 0; i < listOfMenus.length; i++){
-            menu += " " + listOfMenus[i]["name"];
+            session.send(listOfMenus[i]["name"]);
         }
-        session.send(menu);
-        builder.Prompts.text(session, "Please enter your choice:");
-        console.log("Everything works well untill here!");
+        session.send("Please enter your choice:");
+    },
+    function (session, results) {
+        var number = 0;
+        for(var i = 0; i < listOfMenus.length; i++){
+            if(listOfMenus[i]["name"].toUpperCase() === results.response.toUpperCase()) {
+                number = i;
+            }
+        }
 
-        session.send("u r doin good");
+        for(var j = 0; j < listOfMenus[number]["items"].length; j++) {
+            session.send(listOfMenus[i]["name"]);
+        }
+        console.log();
         //console.log(session.conversationData[session.conversationData.length - 1]);
         // console.log(listOfMenus[temp]["name"]);
         // builder.Prompts.text(session, "The following are the options in " + listOfMenus[temp]["name"] + ":");
