@@ -76,7 +76,7 @@ var bot = new builder.UniversalBot(connector, [
         session.dialogData.reservationName = results.response;
 
         // Process request and display reservation details
-        session.send(`Reservation confirmed. Reservation details: <br/>Date/Time: ${session.dialogData.reservationDate} <br/> Restaurant: ${session.dialogData.categories} \
+        session.send(`Reservation confirmed. Reservation details: <br/>Cuisine: ${session.dialogData.typeOfFood} <br/> Restaurant: ${session.dialogData.categories} \
         <br/> Categories: ${session.dialogData.reservationName}`);
         session.endDialog();
     }
