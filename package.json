@@ -17,8 +17,18 @@
   },
   "homepage": "https://github.com/pavanbhat/voiceyourhunger-botservice#readme",
   "dependencies": {
+    "async": "^2.6.0",
+    "axios": "^0.16.2",
     "botbuilder": "^3.14.0",
     "express": "^4.16.2",
-    "restify": "^6.3.4"
+    "geoip-lite": "^1.2.1",
+    "geolocation": "^0.2.0",
+    "iplocation": "^5.0.0",
+    "navigator": "^1.0.1",
+    "public-ip": "^2.4.0",
+    "restify": "^6.3.4",
+    "sync-request": "^5.0.0",
+    "web-midi-api": "^1.4.4",
+    "webmidi": "^2.0.0"
   }
 }
