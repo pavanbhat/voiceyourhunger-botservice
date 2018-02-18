@@ -76,7 +76,7 @@ var bot = new builder.UniversalBot(connector, [
         session.dialogData.reservationName = results.response;
 
         // Process request and display reservation details
-        session.send(`Reservation confirmed. Reservation details: <br/>Date/Time: ${session.dialogData.reservationDate} <br/> Restaurant: ${session.dialogData.partySize} \
+        session.send(`Reservation confirmed. Reservation details: <br/>Date/Time: ${session.dialogData.reservationDate} <br/> Restaurant: ${session.dialogData.categories} \
         <br/> Categories: ${session.dialogData.reservationName}`);
         session.endDialog();
     }
@@ -146,12 +146,16 @@ bot.dialog('askForMenu', [
     function (session, results) {
         session.send("Here are the food options from the menu: "); 
         let flag = false;
+        var menu = "";
         for(var i = 0; i < listOfMenus.length; i++){
-            session.send(listOfMenus[i]["name"]);
+            menu += " " + listOfMenus[i]["name"];
         }
+        session.send(menu);
         builder.Prompts.text(session, "Please enter your choice:");
         console.log("Everything works well untill here!");
-        console.log("Here is the text: " + results.response);
+
+        session.send("u r doin good");
+        //console.log(session.conversationData[session.conversationData.length - 1]);
         // console.log(listOfMenus[temp]["name"]);
         // builder.Prompts.text(session, "The following are the options in " + listOfMenus[temp]["name"] + ":");
         // for(var j = 0; j < listOfMenus[temp]["items"].length; j++){
