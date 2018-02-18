@@ -1,31 +1,25 @@
+// All package imports here
 var restify = require('restify');
 var builder = require('botbuilder');
 var request = require('sync-request');
 var geolocation = require('geolocation');
 const publicIp = require('public-ip');
 var geoip = require('geoip-lite');
-
+// Search REST endpoint
 var url = 'http://ec2-18-219-9-21.us-east-2.compute.amazonaws.com:9999/vyh/api/restaurants/search';
 var locParameters = [];
-// var lat = '', long = '';
 var geo = {};
 let dataOutput = [];
 
-// Geolocation of the user
-// geolocation.getCurrentPosition(function (error, pos) {
-//     if (error) throw error
-//     console.log(pos);
-// });
-
+// Getting dynamic IP address in order to provide the location parameters (latitude and longitude)
 publicIp.v4().then(ip => (callbackFunc) => {
     var val = ""+ip;
     global.geo = JSON.parse(JSON.stringify(geoip.lookup(val)));
     console.log(global.geo);
 
     var postData = JSON.stringify({
-        "latitude": global.geo['ll'][0],
-        "longitude": global.geo['ll'][0],
-        "method" : "both"
+        "lat": global.geo['ll'][0],
+        "long": global.geo['ll'][0]
       });
     
     var response = request('POST', url, { headers: {      
@@ -38,7 +32,6 @@ function callbackFunc(err, data){
 }
 
 // Bot Setup
-
 // Setup restify server
 var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function(){
@@ -58,7 +51,7 @@ server.post('/api/messages', connector.listen());
 var resultantOrder = {};
 var inMemoryStorage = new builder.MemoryBotStorage();
 
-// This is a dinner reservation bot that uses multiple dialogs to prompt users for input.
+// This is an online food reservation bot that uses multiple dialogs to prompt users for input.
 var bot = new builder.UniversalBot(connector, [
     function (session) {
         session.send("Welcome to the online food delivery.");
@@ -93,7 +86,7 @@ bot.dialog('askForTypeOfFood', [
     },
     function (session, results) {
         console.log("TYPE:", );
-        //POST
+        //POST (With Dummy Payload)
         var postData = JSON.stringify({
             "latitude": "37.761479",
             "longitude": "-122.449275",
@@ -104,7 +97,6 @@ bot.dialog('askForTypeOfFood', [
         var response = request('POST', url, { headers: {      
             'content-type': 'application/json'
           }, body: postData});
-        // var user = JSON.parse(response.getBody('utf8'));
         var resArr = JSON.parse(response.getBody('utf-8'));
         // console.log(dataOutput);
         dataOutput = [];
@@ -118,7 +110,6 @@ bot.dialog('askForRestaurant', [
     function (session) {
         builder.Prompts.text(session, "Here are the list of restaurants for you: ");
         // console.log("WATCH OUT: ", dataOutput);
-        
         for(let i = 0; i < dataOutput.length; i++){
             console.log(typeof dataOutput[i]["apiKey"]);
             listOfRestaurants.set(""+dataOutput[i]["name"], ""+dataOutput[i]["apiKey"]);
@@ -128,10 +119,10 @@ bot.dialog('askForRestaurant', [
     function (session, results) {
         console.log(listOfRestaurants[""+session.message['text']]);
         console.log(results);
+        // Menu REST endpoint
         var menuURL = 'http://ec2-18-219-9-21.us-east-2.compute.amazonaws.com:9999/vyh/api/restaurants/' + listOfRestaurants.get(""+session.message['text']) + '/menu'; 
         
         var response = request('GET', menuURL);
-        // var user = JSON.parse(response.getBody('utf8'));
         var resArr = JSON.parse(response.getBody('utf-8'));
         // console.log(dataOutput);
         listOfMenus = [];
@@ -141,7 +132,7 @@ bot.dialog('askForRestaurant', [
     }
 ]);
 
-// Dialog to ask for the reservation name.
+// Dialog to ask for the delicacies from the food menu.
 bot.dialog('askForMenu', [
     function (session) {
         builder.Prompts.text(session, "Here are the food options from the menu: "); 
