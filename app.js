@@ -65,7 +65,7 @@ var bot = new builder.UniversalBot(connector, [
         session.beginDialog('askForTypeOfFood');
     },
     function (session, results) {
-        session.dialogData.reservationDate = builder.EntityRecognizer.resolveTime([results.response]);
+        session.dialogData.typeOfFood = results.response;
         session.beginDialog('askForRestaurant');
     },
     function (session, results) {
@@ -157,20 +157,10 @@ bot.dialog('askForMenu', [
                 number = i;
             }
         }
-
+        builder.Prompts.text(session, "Please enter your choice:");
         for(var j = 0; j < listOfMenus[number]["items"].length; j++) {
-            session.send(listOfMenus[i]["name"]);
+            session.send(listOfMenus[number]["items"][j]["name"]);
         }
-        console.log();
-        //console.log(session.conversationData[session.conversationData.length - 1]);
-        // console.log(listOfMenus[temp]["name"]);
-        // builder.Prompts.text(session, "The following are the options in " + listOfMenus[temp]["name"] + ":");
-        // for(var j = 0; j < listOfMenus[temp]["items"].length; j++){
-        //     session.send(listOfMenus[temp]["items"][j]["name"]);
-        // }
-        // builder.Prompts.text(session, "What would you like to have?");
-        // var option = results.response;
-        
         session.endDialogWithResult(results);
     }
 ]);
