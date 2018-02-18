@@ -1,5 +1,6 @@
 var restify = require('restify');
 var builder = require('botbuilder');
+const requester = require('./requester');
 
 // Bot Setup
 
@@ -29,7 +30,7 @@ var bot = new builder.UniversalBot(connector, [
         session.beginDialog('askForTypeOfFood');
     },
     function (session, results) {
-        session.dialogData.reservationDate = builder.([results.response]);
+        session.dialogData.reservationDate = builder.EntityRecognizer.resolveTime([results.response]);
 
         session.beginDialog('askForPartySize');
     },
@@ -78,3 +79,8 @@ bot.dialog('askForReserverName', [
         session.endDialogWithResult(results);
     }
 ]);
+
+
+
+
+
