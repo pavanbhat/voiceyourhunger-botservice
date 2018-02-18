@@ -16,10 +16,11 @@ publicIp.v4().then(ip => (callbackFunc) => {
     var val = ""+ip;
     global.geo = JSON.parse(JSON.stringify(geoip.lookup(val)));
     console.log(global.geo);
-
+// Location REST endpoint
+    var url = 'http://ec2-18-219-9-21.us-east-2.compute.amazonaws.com:9999/vyh/api/location';
     var postData = JSON.stringify({
         "lat": global.geo['ll'][0],
-        "long": global.geo['ll'][0]
+        "lon": global.geo['ll'][0]
       });
     
     var response = request('POST', url, { headers: {      
@@ -69,7 +70,7 @@ var bot = new builder.UniversalBot(connector, [
         session.dialogData.reservationName = results.response;
 
         // Process request and display reservation details
-        session.send(`Reservation confirmed. Reservation details: <br/>Cuisine: ${session.dialogData.typeOfFood} <br/> Restaurant: ${session.dialogData.categories} \
+        session.send(`Order confirmed. Reservation details: <br/>Cuisine: ${session.dialogData.typeOfFood} <br/> Restaurant: ${session.dialogData.categories} \
         <br/> Categories: ${session.dialogData.reservationName}`);
         session.endDialog();
     }
@@ -140,18 +141,19 @@ bot.dialog('askForMenu', [
             session.send(listOfMenus[i]["name"]);
         }
         session.send("Please enter your choice:");
-    },
-    function (session, results) {
+    },function (session) {
         var number = 0;
         for(var i = 0; i < listOfMenus.length; i++){
-            if(listOfMenus[i]["name"].toUpperCase() === results.response.toUpperCase()) {
+            if(listOfMenus[i]["name"].toUpperCase() === session.message['text'].toUpperCase()) {
                 number = i;
             }
-        }
-        builder.Prompts.text(session, "Please enter your choice:");
+        }     
         for(var j = 0; j < listOfMenus[number]["items"].length; j++) {
             session.send(listOfMenus[number]["items"][j]["name"]);
         }
+        builder.Prompts.text(session, "Please enter your choice:");
+    },
+    function (session, results) {
         session.endDialogWithResult(results);
     }
 ]);
